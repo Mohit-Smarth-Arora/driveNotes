@@ -11,7 +11,7 @@
 ---
 
 ## 📥 How to Install
-1. Download the latest APK from [Releases]((https://github.com/Mohit-Smarth-Arora/driveNotes/releases/tag/v1.0.0))
+1. Download the latest APK from [Releases](https://github.com/Mohit-Smarth-Arora/driveNotes/releases/tag/v1.0.0)
 2. Open the downloaded `.apk` file
 3. Tap "Install" (enable "Unknown sources" if prompted)
 4. Launch the app and sign in with Google
