@@ -15,7 +15,7 @@
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
   <img src="https://drive.google.com/uc?export=view&id=1PeH_rtblQdv0S_AU0JG0K1Z3QYmNDpRU" alt="Welcome Screen" width="200">
-  <img src="assets/screenshots/auth.jpg" alt="Google Sign-In" width="200">
+  <img src="https://drive.google.com/file/d/11IMaPA-7mrbMY2sr-blCy_I3P_1GJ3QQ/view?usp=drive_link" alt="Google Sign-In" width="200">
   <img src="assets/screenshots/notes_list.jpg" alt="Notes List" width="200">
   <img src="assets/screenshots/editor.jpg" alt="Note Editor" width="200">
   <img src="assets/screenshots/offline.jpg" alt="Offline Mode" width="200">
