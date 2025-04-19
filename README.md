@@ -11,7 +11,7 @@
 ---
 
 ## 📥 How to Install
-1. Download the latest APK from [Releases](https://github.com/yourusername/DriveNotes/releases)
+1. Download the latest APK from [Releases]([https://github.com/yourusername/DriveNotes/releases](https://github.com/Mohit-Smarth-Arora/driveNotes/releases/tag/v1.0.0))
 2. Open the downloaded `.apk` file
 3. Tap "Install" (enable "Unknown sources" if prompted)
 4. Launch the app and sign in with Google
@@ -22,8 +22,9 @@
 
 ## ✨ Key Features
 - **Work offline** - Notes save locally first
+- **Oauth Authentication**
 - **Auto-sync** to Google Drive when online
 - **Material Design** with dark/light themes
-- **Fast search** through all notes
+- **Multiple Account Support** - user can switch accounts simultaneously
 
 ---
