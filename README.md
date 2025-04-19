@@ -17,9 +17,10 @@
   
   <img src="https://drive.google.com/uc?export=view&id=11IMaPA-7mrbMY2sr-blCy_I3P_1GJ3QQ" alt="Google Sign-In" width="200">
   <img src="https://drive.google.com/uc?export=view&id=1kBRCHXEIRVWYx3rZ_cIGc7QHB98p0g8b" alt="Screenshot" width="200">
-  <img src="https://drive.google.com/uc?export=view&id=14T1eD2ZdtFHjvhwSZAjWKGJBKPLhH-hD" alt="Notes List" width="200">
   <img src="https://drive.google.com/uc?export=view&id=1ucMsrG-sNXEHMrqducgeI_Y7DnbaZ8aD" alt="Note Editor" width="200">
-  <img src="assets/screenshots/offline.jpg" alt="Offline Mode" width="200">
+  <img src="https://drive.google.com/uc?export=view&id=14T1eD2ZdtFHjvhwSZAjWKGJBKPLhH-hD" alt="Notes List" width="200">
+  
+<!--   <img src="assets/screenshots/offline.jpg" alt="Offline Mode" width="200"> -->
   <img src="https://drive.google.com/uc?export=view&id=1PeH_rtblQdv0S_AU0JG0K1Z3QYmNDpRU" alt="Sync Success" width="200">
 </div>
 
