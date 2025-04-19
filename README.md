@@ -9,6 +9,32 @@
 **Offline-first notes with Google Drive backup**
 
 ---
+-----------------------------------------------------------------------
+
+## 📱 App Preview
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="assets/screenshots/welcome.jpg" alt="Welcome Screen" width="200">
+  <img src="assets/screenshots/auth.jpg" alt="Google Sign-In" width="200">
+  <img src="assets/screenshots/notes_list.jpg" alt="Notes List" width="200">
+  <img src="assets/screenshots/editor.jpg" alt="Note Editor" width="200">
+  <img src="assets/screenshots/offline.jpg" alt="Offline Mode" width="200">
+  <img src="assets/screenshots/sync_success.jpg" alt="Sync Success" width="200">
+</div>
+
+---
+
+## 🚀 Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **🔒 Secure Authentication** | Google OAuth 2.0 login with multi-account support |
+| **📱 Offline-First** | Notes save locally and sync when online |
+| **🔄 Auto-Sync** | Seamless background synchronization with Google Drive |
+| **✏️ Rich Editing** | Markdown support with live preview |
+| **⏱️ Version History** | Track changes through Google Drive |
+| **Dark Mode/Light Mode** | user can freely switch between dark/light mode |
+
 
 ## 📥 How to Install
 1. Download the latest APK from [Releases](https://github.com/Mohit-Smarth-Arora/driveNotes/releases/tag/v1.0.0)
