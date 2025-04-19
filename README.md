@@ -1,16 +1,29 @@
 # drivenotes
 
-A new Flutter project.
+# DriveNotes Sync 📱➡️☁️
 
-## Getting Started
+## App Icon
 
-This project is a starting point for a Flutter application.
+<img src="lib/assets/images/notes_icon.png" alt="App Icon" width="120">
 
-A few resources to get you started if this is your first Flutter project:
+**Offline-first notes with Google Drive backup**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📥 How to Install
+1. Download the latest APK from [Releases](https://github.com/yourusername/DriveNotes/releases)
+2. Open the downloaded `.apk` file
+3. Tap "Install" (enable "Unknown sources" if prompted)
+4. Launch the app and sign in with Google
+
+> ⚠️ **Note**: Google Drive sync requires internet connection
+
+---
+
+## ✨ Key Features
+- **Work offline** - Notes save locally first
+- **Auto-sync** to Google Drive when online
+- **Material Design** with dark/light themes
+- **Fast search** through all notes
+
+---
