@@ -24,7 +24,7 @@
 
 ---
 
-## 🚀 Key Features
+## ✨ Key Features
 
 | Feature | Description |
 |---------|-------------|
@@ -43,14 +43,5 @@
 4. Launch the app and sign in with Google
 
 > ⚠️ **Note**: Google Drive sync requires internet connection
-
----
-
-## ✨ Key Features
-- **Work offline** - Notes save locally first
-- **Oauth Authentication**
-- **Auto-sync** to Google Drive when online
-- **Material Design** with dark/light themes
-- **Multiple Account Support** - user can switch accounts simultaneously
 
 ---
