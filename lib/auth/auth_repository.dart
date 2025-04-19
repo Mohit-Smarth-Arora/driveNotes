@@ -1,8 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/googleapis_auth.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+
+import '../services/local/local_storage_service.dart';
 
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
@@ -16,6 +20,7 @@ class AuthRepository {
 
   Future<AuthClient?> signInWithGoogle() async {
     try {
+
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return null;
 
@@ -47,10 +52,18 @@ class AuthRepository {
     }
   }
 
+
+
   Future<void> signOut() async {
     try {
       if (await _googleSignIn.isSignedIn()) {
         await _googleSignIn.signOut();
+        // Clear local data
+        final localStorage = LocalStorageService();
+        await localStorage.clearAllData();
+
+        // Invalidate all providers
+        debugPrint('User signed out and app reset complete');
         try {
           await _googleSignIn.disconnect(); // Disconnect only if needed
         } catch (e) {

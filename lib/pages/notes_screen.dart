@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
+import 'package:intl/intl.dart';
 import '../auth/auth_repository_provider.dart';
+import '../main.dart';
+import '../restart_widget.dart';
 import '../services/drive_services_provider.dart';
 import '../services/notes_provider.dart';
 import '../themes/theme_provider.dart';
@@ -24,17 +28,31 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(notesProvider.notifier).refreshNotes();
+
+
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        // message = 'App just opened!';
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+              ref.read(notesProvider.notifier).refreshNotes();
+            });
+      });
     });
+
+
+
+
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     final themeNotifier = ref.watch(themeProvider);
     final notesAsync = ref.watch(notesProvider);
     final currentUser = ref.watch(authRepositoryProvider).getCurrentUser();
-    final isAuthReady = ref.watch(authClientProvider.select((s) => !s.isLoading));
+    final isAuthReady =
+        ref.watch(authClientProvider.select((s) => !s.isLoading));
 
     return Scaffold(
       appBar: AppBar(
@@ -69,18 +87,57 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
               return const SizedBox.shrink();
             },
           ),
+          // IconButton(
+          //   icon: const Icon(Icons.logout),
+          //   onPressed: () async {
+          //     await ref.read(authRepositoryProvider).signOut();
+          //     if (mounted) {
+          //       await ref.read(authRepositoryProvider).signOut();
+          //       ScaffoldMessenger.of(context).showSnackBar(
+          //         const SnackBar(content: Text('Signed Out')),
+          //       );
+          //       Navigator.of(context).pushReplacement(
+          //         MaterialPageRoute(builder: (_) => const AuthScreen()),
+          //       );
+          //     }
+          //   },
+          // ),
+
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await ref.read(authRepositoryProvider).signOut();
-              if (mounted) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const AuthScreen()),
-                );
+              try {
+                // 1. Perform sign-out
+                await ref.read(authRepositoryProvider).signOut();
+
+                // 2. Clear local data (if needed)
+                await ref.read(localStorageServiceProvider).clearAllData();
+
+                if (mounted) {
+                  // 3. Show feedback
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Signed Out')),
+                  );
+
+                  // 4. FULL app reset (recommended approach)
+                  RestartWidget.restartApp(context);
+
+                  // Alternative if you don't want full restart:
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(builder: (_) => const AuthScreen()),
+                  //   (route) => false,
+                  // );
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Logout failed: ${e.toString()}')),
+                  );
+                }
               }
             },
-          ),
-
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -105,12 +162,21 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) => Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(height: 200,),
+                Image.asset("lib/assets/images/disconnected.png",scale: 5,),
+                SizedBox(height: 50,),
                 Text('Error loading notes: $error'),
+                Text("You are Offline!",style: TextStyle(fontSize: 25),),
                 TextButton(
-                  onPressed: () => ref.refresh(notesProvider),
-                  child: const Text('Retry'),
+                  style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                  onPressed: () async => {
+                    ref.refresh(notesProvider),
+                    await GoogleSignIn().signOut(), // Sign out the user
+                    await GoogleSignIn().signIn(), // Sign them back in
+                  },
+                  child: const Text('Retry',style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
@@ -133,18 +199,67 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
               );
             }
             return ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: notes.length,
               itemBuilder: (context, index) {
                 final note = notes[index];
-                return ListTile(
-                  leading: const Icon(Icons.note),
-                  title: Text(note.name?.replaceAll('.txt', '') ?? 'Untitled'),
-                  subtitle: Text(
-                    note.modifiedTime?.toIso8601String() ?? 'No date',
-                    style: Theme.of(context).textTheme.bodySmall,
+                print(notes[1].name);
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  onTap: () => _openNoteEditor(context, note),
-                  onLongPress: () => _deleteNote(context, note),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => _openNoteEditor(context, note),
+                    onLongPress: () => _deleteNote(context, note),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              // Icon(Icons.note, color: Theme.of(context).primaryColor),
+                              Icon(Icons.note, color: Colors.blue),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  note.name?.replaceAll('.txt', '') ?? 'Untitled',
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Text(note.description.toString()),
+                          const SizedBox(height: 8),
+                          if (note.modifiedTime != null)
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  size: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  DateFormat('MMM d, yyyy • h:mm a')
+                                      .format(note.modifiedTime!.toLocal()),
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
             );
@@ -188,7 +303,9 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Delete Note'),
         content: Text(
-            'Are you sure you want to delete "${note.name?.replaceAll('.txt', '')}"?'),
+          'Are you sure you want to delete "${note.name?.replaceAll('.txt', '')}"?',
+          style: TextStyle(fontSize: 22),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

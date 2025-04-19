@@ -1,3 +1,4 @@
+import 'package:drivenotes/restart_widget.dart';
 import 'package:drivenotes/services/drive_service.dart';
 import 'package:drivenotes/services/drive_services_provider.dart';
 import 'package:drivenotes/services/local/local_storage_service.dart';
@@ -28,11 +29,13 @@ void main() async {
   await localStorage.init();
 
   runApp(
-    ProviderScope(
-      overrides: [
-        localStorageServiceProvider.overrideWithValue(localStorage),
-      ],
-      child: const MyApp(),
+    RestartWidget(
+      child: ProviderScope(
+        overrides: [
+          localStorageServiceProvider.overrideWithValue(localStorage),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -42,10 +45,14 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+
     final authRepo = ref.watch(authRepositoryProvider);
     final theme = ref.watch(themeProvider).themeData;
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+
       title: 'Drive Notes',
       theme: theme,
       home: FutureBuilder<bool>(
@@ -58,6 +65,7 @@ class MyApp extends ConsumerWidget {
           }
           return snapshot.data == true
               ? const NotesScreen()
+              // ? const AuthScreen()
               : const AuthScreen();
         },
       ),

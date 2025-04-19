@@ -1,3 +1,4 @@
+import 'package:drivenotes/pages/notes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/drive/v3.dart';
@@ -191,15 +192,22 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
               )
             else
               IconButton(
-                icon: const Icon(Icons.save),
+                icon: const Icon(Icons.save,color: Colors.blue,),
                 onPressed: _hasChanges
-                    ? () {
-                  _saveNote();                  // Your note saving logic
-                  Navigator.pop(context);       // Go back after saving
+                    ? () async{
+                  await _saveNote();                  // Your note saving logic
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NotesScreen()));       // Go back after saving
                 }
                     : null,
                 tooltip: 'Save',
               ),
+
+              // IconButton(
+              //   icon: const Icon(Icons.save),
+              //   onPressed: _hasChanges ? _saveNote  : null,
+              //   tooltip: 'Save',
+              // ),
+
 
             IconButton(
               icon: Icon(_isPreview ? Icons.edit : Icons.preview),
@@ -228,6 +236,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                       enabled: !_isLoading,
                     ),
                   ),
+
       ),
     );
   }

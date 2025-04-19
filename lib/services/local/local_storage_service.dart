@@ -1,4 +1,5 @@
 // local_storage_service.dart
+import 'package:flutter/cupertino.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:hive/hive.dart';
 
@@ -37,6 +38,13 @@ class LocalStorageService {
     final box = Hive.box<Map>(_notesBox);
     return box.values.where((note) => note['isSynced'] == false).toList();
   }
+
+  Future<void> clearAllData() async {
+    final box = Hive.box<Map>(_notesBox);
+    await box.clear();
+    debugPrint('All local data cleared');
+  }
+
 
   Future<void> markNoteAsUnsynced(String id) async {
     final note = await getNote(id);

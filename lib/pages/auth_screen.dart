@@ -15,7 +15,8 @@ class AuthScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.note_alt, size: 100, color: Colors.blue),
+            Image.asset("lib/assets/images/notes_icon.png",scale: 4,),
+            // const Icon(Icons.note_alt, size: 100, color: Colors.blue),
             const SizedBox(height: 24),
             const Text(
               'Drive Notes',
@@ -25,7 +26,7 @@ class AuthScreen extends ConsumerWidget {
             const Text('Store and sync your notes with Google Drive'),
             const SizedBox(height: 32),
             FilledButton.icon(
-              icon: const Icon(Icons.login),
+              icon: Image.asset("lib/assets/images/google_logo.png",scale: 18,),
               label: const Text('Sign in with Google'),
               onPressed: () {
                 Future.microtask(() async {
