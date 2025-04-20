@@ -96,7 +96,7 @@ class LocalStorageService {
     }
   }
 
-
+  //
   Future<List<Map>> getAllLocalNotes() async {
     final _notesBox = 'offline_notes';
     final box = Hive.box<Map>(_notesBox);

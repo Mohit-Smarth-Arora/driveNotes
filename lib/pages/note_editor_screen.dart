@@ -6,6 +6,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import '../main.dart';
 import '../services/drive_services_provider.dart';
 import '../services/local/local_storage_service.dart';
+import '../services/local/sync_service.dart';
 import '../services/notes_provider.dart';
 
 class NoteEditorScreen extends ConsumerStatefulWidget {
@@ -35,6 +36,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     _titleController.addListener(_checkForChanges);
     _contentController.addListener(_checkForChanges);
   }
+
 
   @override
   void dispose() {
@@ -96,9 +98,16 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     }
   }
 
+
+
+
   Future<void> _saveNote() async {
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
+    final connectivityStatusProvider = StreamProvider<bool>((ref) {
+      return ref.watch(syncServiceProvider).connectivityStream;
+    });
+
 
     if (title.isEmpty) {
       _showError('Title cannot be empty');
@@ -107,7 +116,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
 
     setState(() => _isLoading = true);
     try {
+
       final notesNotifier = ref.read(notesProvider.notifier);
+      final isOnline = ref.read(connectivityStatusProvider).value ?? false;
 
       if (widget.note == null) {
         await notesNotifier.createNote(title, content);
@@ -116,12 +127,23 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
       }
 
       if (mounted) {
-        Navigator.pop(context);
+        // Only navigate if we're online or don't need sync
+        if (isOnline || widget.note == null) {
+          Navigator.pop(context);
+        } else {
+          // For offline updates, show success but stay in editor
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Saved locally - will sync when online')),
+          );
+          setState(() {
+            _isLoading = false;
+            _hasChanges = false;
+          });
+        }
       }
     } catch (e) {
-      _showError('Failed to save note: $e');
-    } finally {
       if (mounted) {
+        _showError('Failed to save note: ${e.toString()}');
         setState(() => _isLoading = false);
       }
     }
@@ -196,7 +218,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                 onPressed: _hasChanges
                     ? () async{
                   await _saveNote();                  // Your note saving logic
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NotesScreen()));       // Go back after saving
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => const NotesScreen()));       // Go back after saving
                 }
                     : null,
                 tooltip: 'Save',
@@ -217,7 +239,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
           ],
         ),
         body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())   // can put notesscreen here to avoid loading indicator
+
+
             : _isPreview
                 ? Markdown(
                     data: _contentController.text,

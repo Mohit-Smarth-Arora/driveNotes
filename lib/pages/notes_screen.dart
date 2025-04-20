@@ -12,9 +12,6 @@ import '../themes/theme_provider.dart';
 import 'auth_screen.dart';
 import 'note_editor_screen.dart';
 
-// import 'notes_provider.dart';
-// import 'auth_repository.dart';
-
 class NotesScreen extends ConsumerStatefulWidget {
   const NotesScreen({super.key});
 
@@ -29,7 +26,6 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
   void initState() {
     super.initState();
 
-
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         // message = 'App just opened!';
@@ -38,11 +34,6 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
             });
       });
     });
-
-
-
-
-
   }
 
   @override
@@ -164,20 +155,38 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: 200,),
+                SizedBox(height: 180,),
                 Image.asset("lib/assets/images/disconnected.png",scale: 5,),
                 SizedBox(height: 50,),
-                Text('Error loading notes: $error'),
+                // Text('Error loading notes: $error'),
                 Text("You are Offline!",style: TextStyle(fontSize: 25),),
+                Text("add a new note by pressing + "),
+                SizedBox(height: 10,),
                 TextButton(
                   style: TextButton.styleFrom(backgroundColor: Colors.blue),
                   onPressed: () async => {
+
                     ref.refresh(notesProvider),
                     await GoogleSignIn().signOut(), // Sign out the user
-                    await GoogleSignIn().signIn(), // Sign them back in
+                    await GoogleSignIn().signIn(),// Sign them back in
                   },
                   child: const Text('Retry',style: TextStyle(color: Colors.white),),
                 ),
+
+                // TextButton(
+                //   style: TextButton.styleFrom(backgroundColor: Colors.orange),
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (_) => const NotesScreen(),
+                //       ),
+                //     );
+                //   },
+            // ,
+            //       child: const Text('View Offline Notes', style: TextStyle(color: Colors.white)),
+            //     ),
+
               ],
             ),
           ),
@@ -203,7 +212,6 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
               itemCount: notes.length,
               itemBuilder: (context, index) {
                 final note = notes[index];
-                print(notes[1].name);
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   elevation: 1,

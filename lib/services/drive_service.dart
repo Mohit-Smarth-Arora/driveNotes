@@ -1,4 +1,7 @@
+import 'package:drivenotes/pages/notes_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/googleapis_auth.dart';
 import 'dart:async';
@@ -77,6 +80,7 @@ class DriveService {
 
   /// Creates a new note with retry logic
   Future<File> createNote(String title, String content) async {
+
     try {
       final folderId = await _getOrCreateNotesFolder();
       final file = File()
@@ -93,11 +97,14 @@ class DriveService {
       return await _driveApi.files.create(file, uploadMedia: media);
     } catch (e) {
       debugPrint('Error creating note: $e');
+
+
       // Retry once if fails
       await Future.delayed(const Duration(seconds: 1));
       return createNote(title, content);
     }
   }
+
 
   /// Updates an existing note with conflict handling
   Future<File> updateNote(String fileId, String title, String content) async {
